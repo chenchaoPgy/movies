@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'dart:async';
+import 'movieDetail.dart';
 
 class MovieList extends StatefulWidget {
   final String mt;
@@ -27,6 +29,8 @@ class _MovieListState extends State<MovieList> {
   //数据总条数
   var total = 0;
 
+  var mListAl = [];
+
   //控件被创建的时候会执行initState()
   @override
   void initState() {
@@ -36,7 +40,59 @@ class _MovieListState extends State<MovieList> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(widget.mt + "total===$total");
+    return ListView.builder(
+        itemCount: mList.length,
+        itemBuilder: (BuildContext context, int pos) {
+          var item = mList[pos];
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
+                return new MovieDetail(id: item['id'], title: item['title']);
+              }));
+            },
+            child: Container(
+              height: 200,
+              decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: Colors.black12))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Image.network(
+                    item['images']['small'],
+                    height: 180,
+                    width: 130,
+                    fit: BoxFit.cover,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 10),
+                    height: 200,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('电影名称：${item['title']}'),
+                        Text('上映年份：${item['year']}'),
+                        Text('电影类型：${item['genres'].join(',')}'),
+                        Text('豆瓣评分：${item['rating']['average']}'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text('主要演员：'),
+                            CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  'https://img3.doubanio.com/view/celebrity/s_ratio_celebrity/public/p1501911452.02.webp'),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   //获取电影列表
