@@ -4,7 +4,6 @@ import 'dart:async';
 
 class MovieList extends StatefulWidget {
   final String mt;
-  int start;
 
   @override
   _MovieListState createState() => _MovieListState();
@@ -20,7 +19,7 @@ class _MovieListState extends State<MovieList> {
   int page = 1;
 
   //默认显示的数据条数
-  int pagesize = 10;
+  int pageSize = 10;
 
   //电影列表数据
   var mList = [];
@@ -43,9 +42,9 @@ class _MovieListState extends State<MovieList> {
   //获取电影列表
   getMovieList() async {
     //偏移量 计算公式  (page - 1) * pagesize
-    int offset = (page - 1) * pagesize;
+    int offset = (page - 1) * pageSize;
     var response = await dio.get(
-        'http://www.liulongbin.top:3005/api/v2/movie/${widget.mt}?start=$offset&count=$pagesize');
+        'http://www.liulongbin.top:3005/api/v2/movie/${widget.mt}?start=$offset&count=$pageSize');
     var result = response.data;
     print(result);
     //只要是要赋值 就要放到setState函数中
